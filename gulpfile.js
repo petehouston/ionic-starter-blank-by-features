@@ -6,9 +6,13 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var $ = require('gulp-load-plugins')();
+var argv = require('yargs').argv;
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+  sass: ['./scss/**/*.scss'],
+  templates: ['./templates'],
+  features: ['./www/features']
 };
 
 gulp.task('default', ['sass']);
@@ -48,4 +52,40 @@ gulp.task('git-check', function(done) {
     process.exit(1);
   }
   done();
+});
+
+gulp.task('make:features', function (done) {
+    if (!argv.feature) {
+        console.log(
+            'Error: ' + gutil.colors.red('must pass -feature- name'),
+            '\n $ gulp make:features --feature=FEATURE'
+        );
+        process.exit(1);
+    }
+    gulp.src(paths.templates + '/feature.js')
+        .pipe($.template({
+            module: argv.module || 'app.features.' + argv.feature,
+            feature: argv.feature,
+            state: argv.state || argv.feature,
+            controller: argv.controller || argv.feature,
+            title: argv.title || argv.feature
+        }))
+        .pipe($.rename(argv.feature + '.js'))
+        .pipe(gulp.dest(paths.features + '/' + argv.feature));
+    gulp.src(paths.templates + '/feature.tpl.html')
+        .pipe($.rename(argv.feature + '.tpl.html'))
+        .pipe(gulp.dest(paths.features + '/' + argv.feature));
+
+    var target = gulp.src('./www/index.html');
+    var source = gulp.src(
+        paths.features + '/' + argv.feature + '.js',
+        { read: false }
+    );
+    target
+        .pipe($.inject(source, {
+            name: 'feature'
+        }))
+        .pipe(gulp.dest('./www'));
+
+    done();
 });
