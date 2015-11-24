@@ -11,6 +11,8 @@
   },
   "devDependencies": {
     "bower": "^1.3.3",
+    "gulp-inject": "^3.0.0",
+    "gulp-template": "^3.1.0",
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
   },
@@ -24,5 +26,27 @@
   ],
   "cordovaPlatforms": [
     "ios"
-  ]
+  ],
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/petehouston/ionic-starter-blank-by-features.git"
+  },
+  "keywords": [
+    "ionic",
+    "angular",
+    "javascript",
+    "cordova",
+    "bower",
+    "template"
+  ],
+  "author": "Pete Houston <contact@petehouston.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/petehouston/ionic-starter-blank-by-features/issues"
+  },
+  "homepage": "https://github.com/petehouston/ionic-starter-blank-by-features"
 }
